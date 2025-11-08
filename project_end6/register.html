@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ثبت نام</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Baloo Bhaijaan 2", sans-serif !important;
+        background: linear-gradient(rgba(2, 2, 2, 0.369), rgba(2, 2, 2, 0.3)),
+          url("https://img.freepik.com/premium-vector/geometric-gradient-technology-background_23-2149110132.jpg");
+        background-size: cover;
+        background-position: center;
+        direction: rtl;
+        text-align: right;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 1s;
+      }
+
+      .btn-primary {
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
+        transition: background-color 0.3s, transform 0.3s;
+      }
+
+      .btn-primary:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        transform: scale(1.05);
+      }
+
+      .alert-message {
+        margin-top: 15px;
+        animation: fadeInDown 1s;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translate3d(0, -40px, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      a {
+        text-decoration: none !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row justify-content-center mt-5 text-light">
+        <div class="col-md-6">
+          <div class="border border-light px-4 py-3 rounded">
+            <div
+              class="text-center d-flex flex-column justify-content-center align-items-start pt-0"
+            >
+              <h1 class="pb-5 pt-2">ثبت نام</h1>
+            </div>
+            <div id="error-container"></div>
+            <div>
+              <form id="form" method="post" action="#">
+                <div class="form-group">
+                  <label for="firstname">نام </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="firstname"
+                    name="firstname"
+                    placeholder="نام خود را وارد کنید"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="lastname">نام خانوادگی</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="lastname"
+                    name="lastname"
+                    placeholder="نام خانوادگی خود را وارد کنید"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="username">نام کاربری</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    placeholder="نام کاربری خود را وارد کنید"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">ایمیل</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="آدرس ایمیل خود را وارد کنید"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="password">رمز عبور</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="رمز عبور خود را وارد کنید"
+                  />
+                </div>
+                <button id="submit" type="submit" class="btn btn-primary">
+                  ثبت نام
+                </button>
+                <div class="mt-3">
+                  حساب کاربری دارید؟ <a href="login.html">وارد شوید</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+    ></script>
+
+    <script>
+      $(document).ready(function () {
+        $("form").submit(function (event) {
+          const errorContainer = document.getElementById("error-container");
+
+          event.preventDefault();
+          errorContainer.innerHTML = "";
+
+          let formData = {
+            firstname: $("#firstname").val(),
+            lastname: $("#lastname").val(),
+            username: $("#username").val(),
+            email: $("#email").val(),
+            password: $("#password").val(),
+          };
+
+          $.ajax({
+            url: "register.php",
+            type: "POST",
+            dataType: "json",
+            data: formData,
+            success: function (response) {
+              if (response.status === 0) {
+                let classes =
+                  "alert alert-danger alert-message text-center animate__animated animate__fadeInDown";
+                const div = document.createElement("div");
+                div.className += classes;
+                div.textContent = response.error;
+                errorContainer.appendChild(div);
+              } else {
+                let classes =
+                  "alert alert-success alert-message text-center animate__animated animate__fadeInDown";
+                const div = document.createElement("div");
+                div.className += classes;
+                div.textContent = "Registration successful! Please login";
+                errorContainer.appendChild(div);
+                document.getElementById("submit").disabled = true;
+                setTimeout(function () {
+                  window.location.href = "login.html";
+                }, 2000);
+              }
+            },
+            error: function (xhr, status, error) {
+              let classes =
+                "alert alert-danger alert-message text-center animate__animated animate__fadeInDown";
+              const div = document.createElement("div");
+              div.className += classes;
+              div.textContent = "خطایی رخ داده است";
+              errorContainer.appendChild(div);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
